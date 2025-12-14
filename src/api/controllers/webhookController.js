@@ -1,5 +1,5 @@
-const plaidService = require('../services/plaidService');
-const { asyncHandler } = require('../utils/errorHandler');
+const plaidService = require('../../services/plaidService');
+const { asyncHandler } = require('../../utils/errorHandler');
 
 const handleWebhook = asyncHandler(async (req, res) => {
   const webhookData = req.body;

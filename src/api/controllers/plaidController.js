@@ -1,5 +1,5 @@
-const plaidService = require('../services/plaidService');
-const { asyncHandler } = require('../utils/errorHandler');
+const plaidService = require('../../services/plaidService');
+const { asyncHandler } = require('../../utils/errorHandler');
 
 const createLinkToken = asyncHandler(async (req, res) => {
   const { telegram_id } = req.body;
