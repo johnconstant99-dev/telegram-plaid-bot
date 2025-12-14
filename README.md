@@ -32,6 +32,20 @@ A full-stack application that integrates a Telegram bot with Plaid's banking API
   - Winston logging system
   - Docker support for easy deployment
 
+## 🎯 How It Works - Telegram as Your GUI
+
+Unlike traditional web apps, this bot uses **Telegram as the entire user interface**:
+
+- **No frontend code needed** - Telegram handles all UI rendering
+- **Cross-platform** - Works on iOS, Android, Web, Desktop automatically  
+- **Built-in auth** - Telegram manages user identity
+- **Rich UI** - Buttons, keyboards, inline menus provided by Telegram
+- **Users interact via chat** - Simple commands like `/balance` or `/transactions`
+
+The flow: `User's Telegram App → Your Bot → Express API → PostgreSQL + Plaid → Bank Data`
+
+📘 **For complete deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+
 ## 📋 Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -349,8 +363,42 @@ telegram-plaid-bot/
 ├── package.json
 ├── Dockerfile
 ├── docker-compose.yml
+├── DEPLOYMENT.md                 # Complete deployment guide
 └── README.md
 ```
+
+## 🚀 Deployment
+
+This application can be deployed to various platforms. The Telegram bot serves as your GUI - no frontend deployment needed!
+
+### Quick Deploy Options
+
+1. **Heroku** (Easiest for beginners)
+   ```bash
+   heroku create my-telegram-bot
+   heroku addons:create heroku-postgresql:mini
+   git push heroku main
+   ```
+
+2. **DigitalOcean/VPS** (Best for production)
+   - Install Node.js, PostgreSQL, PM2
+   - Clone repo, configure .env
+   - Start with `pm2 start src/index.js`
+
+3. **Docker** (Recommended)
+   ```bash
+   docker-compose up -d
+   ```
+
+### Essential Steps for Any Platform
+
+1. **Get Telegram Bot Token**: Talk to [@BotFather](https://t.me/botfather) on Telegram
+2. **Get Plaid Credentials**: Sign up at [Plaid.com](https://plaid.com)
+3. **Set Environment Variables**: Copy `.env.example` and fill in your credentials
+4. **Initialize Database**: Run `npm run init-db`
+5. **Start Application**: The bot will be your GUI automatically!
+
+📘 **For detailed deployment instructions (cloud, VPS, Docker, monitoring), see [DEPLOYMENT.md](DEPLOYMENT.md)**
 
 ## 🔐 Security Best Practices
 
