@@ -23,7 +23,8 @@ class StripeService {
       logger.info('Retrieving Stripe balance');
       
       // Retrieve balance with optional context
-      const options = context || config.stripe.context ? { stripeAccount: context || config.stripe.context } : {};
+      const stripeAccount = context || config.stripe.context;
+      const options = stripeAccount ? { stripeAccount } : {};
       const balance = await this.client.balance.retrieve(options);
       
       return {

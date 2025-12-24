@@ -24,7 +24,7 @@ const stripeBalanceCommand = async (ctx) => {
       message += '*Available:*\n';
       balance.available.forEach((item) => {
         const amount = (item.amount / 100).toFixed(2);
-        message += `  ${item.currency.toUpperCase()}: $${amount}\n`;
+        message += `  ${item.currency.toUpperCase()}: ${amount}\n`;
       });
       message += '\n';
     }
@@ -33,7 +33,7 @@ const stripeBalanceCommand = async (ctx) => {
       message += '*Pending:*\n';
       balance.pending.forEach((item) => {
         const amount = (item.amount / 100).toFixed(2);
-        message += `  ${item.currency.toUpperCase()}: $${amount}\n`;
+        message += `  ${item.currency.toUpperCase()}: ${amount}\n`;
       });
       message += '\n';
     }
