@@ -8,6 +8,7 @@ const helpCommand = async (ctx) => {
 /link - Connect your bank account via Plaid
 /balance - View all your account balances
 /transactions - View recent transactions (last 30 days)
+/stripe_balance - View your Stripe account balance
 /help - Show this help message
 
 *How to Use:*
@@ -16,6 +17,7 @@ const helpCommand = async (ctx) => {
 2️⃣ Use /link to connect your bank account
 3️⃣ Complete the Plaid Link authentication flow
 4️⃣ View your /balance and /transactions anytime
+5️⃣ Use /stripe_balance to check your Stripe account balance
 
 *Security:*
 🔐 All tokens are encrypted using AES-256-GCM
