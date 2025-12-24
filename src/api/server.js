@@ -8,6 +8,7 @@ const { errorHandler } = require('../utils/errorHandler');
 
 const plaidRoutes = require('./routes/plaid');
 const webhookRoutes = require('./routes/webhook');
+const stripeRoutes = require('./routes/stripe');
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/plaid', plaidRoutes);
 app.use('/api/webhook', webhookRoutes);
+app.use('/api/stripe', stripeRoutes);
 
 // 404 handler
 app.use((req, res) => {

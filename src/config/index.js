@@ -9,6 +9,10 @@ module.exports = {
     secret: process.env.PLAID_SECRET,
     env: process.env.PLAID_ENV || 'sandbox',
   },
+  stripe: {
+    secretKey: process.env.STRIPE_SECRET_KEY,
+    context: process.env.STRIPE_CONTEXT,
+  },
   database: {
     url: process.env.DATABASE_URL,
   },

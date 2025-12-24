@@ -11,6 +11,7 @@ const linkCommand = require('./commands/link');
 const balanceCommand = require('./commands/balance');
 const transactionsCommand = require('./commands/transactions');
 const helpCommand = require('./commands/help');
+const stripeBalanceCommand = require('./commands/stripe_balance');
 
 class TelegramBot {
   constructor() {
@@ -36,6 +37,7 @@ class TelegramBot {
     this.bot.command('balance', balanceCommand);
     this.bot.command('transactions', transactionsCommand);
     this.bot.command('help', helpCommand);
+    this.bot.command('stripe_balance', stripeBalanceCommand);
 
     // Keyboard button handlers
     this.bot.hears('💳 Link Account', linkCommand);
