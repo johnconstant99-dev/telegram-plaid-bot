@@ -66,8 +66,8 @@ This is the equivalent of "building your frontend" - but Telegram does it for yo
 1. Open Telegram and search for `@BotFather`
 2. Start a chat and send: `/newbot`
 3. Follow the prompts:
-   - **Bot Name**: "My Banking Assistant" (user-facing name)
-   - **Bot Username**: "mybanking_assistant_bot" (must end with 'bot')
+   - **Bot Name**: "Aminskid Banking Assistant" (user-facing name)
+   - **Bot Username**: "Aminskid_bot" (must end with 'bot')
 
 4. You'll receive a token like: `123456789:ABCdefGHIjklMNOpqrsTUVwxyz`
    - **SAVE THIS TOKEN** - This is your `TELEGRAM_BOT_TOKEN`
