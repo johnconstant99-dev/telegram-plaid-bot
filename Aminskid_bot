@@ -7,7 +7,7 @@ PLAID_SECRET=379b8044f94339623d98a0b123d709
 PLAID_ENV=production
 
 # Stripe (use sk_test_ for testing, sk_live_ for production)
-STRIPE_SECRET_KEY=mk_1SCbxhCJIdnOmJ9tLDo8AhSy
+STRIPE_SECRET_KEY=pk_live_51SCbgvCJIdnOmJ9tRBo7RgplHHHHrUFNlcNgYj4S92t0uZZlDcYj3X5pVbCSGBoagiHgfGQ6Iv9Z9qEG3kmjbVWF00vrOKqdBF
 STRIPE_CONTEXT=backend
 
 # Database
