@@ -6,9 +6,9 @@ PLAID_CLIENT_ID=693c9227bce2ad001d7edc38
 PLAID_SECRET=379b8044f94339623d98a0b123d709
 PLAID_ENV=production
 
-# Stripe
-STRIPE_SECRET_KEY=pk_live_51SCbgvCJIdnOmJ9t69arLWUnMIMkgtlaQThu0VGu451Gu9FmzYh2livg5bC2DOKb99Mu2QhMyFFYRkVDCPfON4Vb00bi3FKBLg
-STRIPE_CONTEXT=your_stripe_context_here
+# Stripe (use sk_test_ for testing, sk_live_ for production)
+STRIPE_SECRET_KEY=sk_test_51SCbgvCJIdnOmJ9tRBo7RgplHHHHrUFNlcNgYj4S92t0uZZlDcYj3X5pVbCSGBoagiHgfGQ6Iv9Z9qEG3kmjbVWF00vrOKqdBF
+STRIPE_CONTEXT=backend
 
 # Database
 DATABASE_URL=postgresql://user:password@localhost:5432/telegram_plaid
@@ -18,7 +18,7 @@ PORT=3000
 API_BASE_URL=http://localhost:3000
 
 # Security
-ENCRYPTION_KEY=your_32_character_encryption_key_here
+ENCRYPTION_KEY=mk_1ShKD1CJIdnOmJ9tBfbwwLGL
 JWT_SECRET=your_jwt_secret_here
 
 # Logging
