@@ -1,5 +1,5 @@
-# Telegram Plaid Bot
-Aminskid_bot
+# Aminskid_bot
+
 A full-stack application that integrates a Telegram bot with Plaid's banking API, allowing users to securely connect their bank accounts and view financial information directly through Telegram.
 
 ## 🌟 Features
