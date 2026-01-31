@@ -1,0 +1,25 @@
+# Telegram - Use Aminskid_bot token
+# Get your token from @BotFather by creating/accessing Aminskid_bot
+TELEGRAM_BOT_TOKEN=8547609157:AAEmCtlmISRfmZSnWpCDR-En8W0XLAprNLs
+
+# Plaid
+PLAID_CLIENT_ID=693c9227bce2ad001d7edc38
+PLAID_SECRET=379b8044f94339623d98a0b123d709
+PLAID_ENV=production
+
+# Stripe
+STRIPE_SECRET_KEY=mk_1SrXZmCEcR3xRZmbTdmOjelr
+STRIPE_CONTEXT=mk_1SvAziCEcR3xRZmbb6MfL4Sm
+
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/telegram_plaid
+
+# Server
+PORT=3000
+API_BASE_URL=http://localhost:3000
+# Security
+ENCRYPTION_KEY=your_32_character_encryption_key_here
+JWT_SECRET=your_jwt_secret_here
+
+# Logging
+LOG_LEVEL=info
