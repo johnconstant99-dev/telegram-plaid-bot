@@ -140,6 +140,25 @@ async createLinkToken(telegramId) {
 - **Rate limiting** (60 requests/minute per IP)
 - **Input validation** on all endpoints
 
+### Encryption Implementation
+The `encryptionService` provides transparent encryption/decryption:
+```javascript
+const encryptionService = new EncryptionService();
+
+// Encrypt before storing
+const encrypted = encryptionService.encrypt(accessToken);
+await db.query(
+  'INSERT INTO plaid_connections (user_id, access_token) VALUES ($1, $2)',
+  [userId, encrypted]
+);
+
+// Decrypt when retrieving
+const connection = await db.query('SELECT * FROM plaid_connections WHERE user_id = $1', [userId]);
+const decrypted = encryptionService.decrypt(connection.rows[0].access_token);
+```
+
+**Important:** Plaid access tokens MUST always be encrypted before storing.
+
 ### When Adding New Features
 - If handling tokens or secrets, use `encryptionService`
 - If adding API endpoints, apply rate limiting middleware
@@ -155,14 +174,29 @@ The database uses PostgreSQL with three main tables:
 - **transactions_cache:** Cached transaction data
 
 ### Model Methods
-Models use static methods for database operations:
+Models use static methods for database operations. All queries use parameterized arguments ($1, $2, etc.) to prevent SQL injection:
 ```javascript
+// Example: Finding a user by telegram ID
 static async findByTelegramId(telegramId) {
   const result = await db.query(
     'SELECT * FROM users WHERE telegram_id = $1',
-    [telegramId]
+    [telegramId]  // Parameter passed separately
   );
   return result.rows[0] || null;
+}
+
+// Example: Creating/updating a user with ON CONFLICT
+static async create(userData) {
+  const { telegram_id, username, first_name, last_name } = userData;
+  const result = await db.query(
+    `INSERT INTO users (telegram_id, username, first_name, last_name)
+     VALUES ($1, $2, $3, $4)
+     ON CONFLICT (telegram_id) DO UPDATE
+     SET username = $2, first_name = $3, last_name = $4, updated_at = CURRENT_TIMESTAMP
+     RETURNING *`,
+    [telegram_id, username, first_name, last_name]
+  );
+  return result.rows[0];
 }
 ```
 
@@ -171,6 +205,33 @@ static async findByTelegramId(telegramId) {
 - Always use connection pooling (pre-configured in `database/connection.js`)
 - Use indexes on frequently queried columns
 - Handle database errors gracefully with proper logging
+- Never construct query strings with concatenation or template literals
+
+## Configuration Management
+
+### Config Pattern
+All environment-based configuration is centralized in `src/config/index.js`:
+```javascript
+module.exports = {
+  telegram: { botToken: process.env.TELEGRAM_BOT_TOKEN },
+  plaid: {
+    clientId: process.env.PLAID_CLIENT_ID,
+    secret: process.env.PLAID_SECRET,
+    env: process.env.PLAID_ENV || 'sandbox',
+  },
+  database: { url: process.env.DATABASE_URL },
+  server: {
+    port: process.env.PORT || 3000,
+    apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3000',
+  },
+  security: { encryptionKey: process.env.ENCRYPTION_KEY },
+  logging: { level: process.env.LOG_LEVEL || 'info' },
+};
+```
+
+Import and use in all modules: `const config = require('../config');`
+
+This centralizes configuration, making defaults clear and dependencies explicit.
 
 ## Telegram Bot Patterns
 
@@ -197,39 +258,45 @@ Commands are registered in `/bot/index.js`:
 this.bot.command('commandname', commandHandler);
 ```
 
+### Cross-Component Data Flow
+Commands call Express API endpoints via `axios`:
+```javascript
+// In /bot/commands/link.js
+const response = await axios.post(
+  `${config.server.apiBaseUrl}/api/plaid/create-link-token`,
+  { telegram_id: ctx.from.id }
+);
+```
+
+This pattern keeps bot logic thin and delegates business logic to services accessed via REST API.
+
 ## API Patterns
 
-### Controller Structure
-Controllers handle HTTP requests and call services:
+### Controller Structure & Error Handling
+Controllers use `asyncHandler` wrapper for automatic error handling:
 ```javascript
-async createLinkToken(req, res) {
-  try {
-    const { telegram_id } = req.body;
-    
-    // Validation
-    if (!telegram_id) {
-      return res.status(400).json({
-        success: false,
-        error: 'telegram_id is required'
-      });
-    }
+const { asyncHandler } = require('../../utils/errorHandler');
 
-    // Business logic in service
-    const result = await plaidService.createLinkToken(telegram_id);
-    
-    return res.json({
-      success: true,
-      ...result
-    });
-  } catch (error) {
-    logger.error('Controller error:', error);
-    return res.status(500).json({
+const createLinkToken = asyncHandler(async (req, res) => {
+  const { telegram_id } = req.body;
+
+  if (!telegram_id) {
+    return res.status(400).json({
       success: false,
-      error: error.message
+      message: 'telegram_id is required',
     });
   }
-}
+
+  const result = await plaidService.createLinkToken(telegram_id);
+  
+  res.json({
+    success: true,
+    ...result,
+  });
+});
 ```
+
+This pattern eliminates redundant try-catch blocks in every controller.
 
 ### Response Format
 All API responses follow this structure:
