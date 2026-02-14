@@ -1,0 +1,41 @@
+import { StripeAgentToolkit } from '@stripe/agent-toolkit/ai-sdk';
+import { openai } from '@ai-sdk/openai';
+import {
+  convertToCoreMessages,
+  experimental_wrapLanguageModel as wrapLanguageModel,
+  streamText
+} from 'ai';
+
+// Instantiate a new Stripe Agent Toolkit.
+const stripeAgentToolkit = new StripeAgentToolkit({
+  secretKey: process.env.STRIPE_SECRET_KEY!,
+  configuration: {},
+});
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  // Wrap the language model and include the
+  // billing middleware.
+  const model = wrapLanguageModel({
+    model: openai('gpt-4.1'),
+    middleware: stripeAgentToolkit.middleware({
+      billing: {
+        customer: process.env.STRIPE_CUSTOMER_ID!,
+        meters: {
+          input: process.env.STRIPE_METER_INPUT!,
+          output: process.env.STRIPE_METER_OUTPUT!,
+        },
+      },
+    }),
+  });
+
+  // Call the model and stream back the results.
+  const result = await streamText({
+    model: model,
+    system: SYSTEM_PROMPT,
+    messages: convertToCoreMessages(messages),
+  });
+
+  return result.toDataStreamResponse();
+}

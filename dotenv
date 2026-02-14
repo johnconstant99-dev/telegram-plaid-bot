@@ -1,6 +1,6 @@
 # Telegram - Use Aminskid_bot token
 # Get your token from @BotFather by creating/accessing Aminskid_bot
-TELEGRAM_BOT_TOKEN=your_aminskid_bot_token_here
+TELEGRAM_BOT_TOKEN=8547609157:AAEmCtlmISRfmZSnWpCDR-En8W0XLAprNLs
 
 # Plaid
 PLAID_CLIENT_ID=693c9227bce2ad001d7edc38
@@ -17,7 +17,6 @@ DATABASE_URL=postgresql://user:password@localhost:5432/telegram_plaid
 # Server
 PORT=3000
 API_BASE_URL=http://localhost:3000
-
 # Security
 ENCRYPTION_KEY=your_32_character_encryption_key_here
 JWT_SECRET=your_jwt_secret_here
