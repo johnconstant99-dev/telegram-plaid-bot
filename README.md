@@ -1,534 +1,209 @@
-# Aminskid_bot
+# README
 
-A full-stack application that integrates a Telegram bot with Plaid's banking API, allowing users to securely connect their bank accounts and view financial information directly through Telegram.
+Telegram Plaid Bot - Secure Banking Integration for Telegram
 
-## 🌟 Features
+![JavaScript](https://img.shields.io/badge/JavaScript-94.7%25-f7df1e?logo=javascript)
+![PLpgSQL](https://img.shields.io/badge/PLpgSQL-5%25-336791?logo=postgresql)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-- **Telegram Bot Interface**
-  - Interactive command-based navigation
-  - User-friendly keyboard buttons
-  - Real-time account balance viewing
-  - Transaction history retrieval
-  - Secure user authentication
+## 🤖 Overview
 
-- **Plaid Banking Integration**
-  - Secure bank account linking via Plaid Link
-  - Multi-account support
-  - Real-time balance fetching
-  - Transaction history (last 30 days)
-  - Webhook support for updates
+A secure Telegram bot that integrates with Plaid's banking API, allowing users to:
+- Connect their bank accounts directly through Telegram
+- View real-time financial data
+- Manage banking information securely
+- Execute financial operations via chat interface
 
-- **Security & Privacy**
-  - AES-256-GCM encryption for access tokens
-  - Environment-based configuration
-  - Rate limiting protection
-  - No credential storage
-  - Bank-level security through Plaid
+**Technology Stack:**
+- **Runtime:** Node.js 18+ (CommonJS)
+- **Bot Framework:** Telegraf 4.x
+- **API:** Express.js 4.x
+- **Banking:** Plaid API v18
+- **Database:** PostgreSQL with connection pooling
+- **Security:** AES-256-GCM encryption + dotenvx
+- **Containerization:** Docker & Docker Compose
 
-- **Robust Backend**
-  - RESTful API with Express.js
-  - PostgreSQL database with connection pooling
-  - Comprehensive error handling
-  - Winston logging system
-  - Docker support for easy deployment
+## ✨ Features
 
-## 🎯 How It Works - Telegram as Your GUI
+- 🔐 **Secure Authentication** - OAuth2 with encrypted token storage
+- 🏦 **Bank Integration** - Direct Plaid API connectivity
+- 💬 **Chat Interface** - Natural Telegram bot interaction
+- 📊 **Real-time Data** - Live account balances and transactions
+- 🔒 **Encrypted Secrets** - dotenvx for environment management
+- 📦 **Container Ready** - Docker & docker-compose support
+- 🪵 **Structured Logging** - Winston logging throughout
+- ⚡ **Rate Limited** - Express rate-limiting middleware
 
-Unlike traditional web apps, this bot uses **Telegram as the entire user interface**:
+## 🚀 Quick Start
 
-- **No frontend code needed** - Telegram handles all UI rendering
-- **Cross-platform** - Works on iOS, Android, Web, Desktop automatically  
-- **Built-in auth** - Telegram manages user identity
-- **Rich UI** - Buttons, keyboards, inline menus provided by Telegram
-- **Users interact via chat** - Simple commands like `/balance` or `/transactions`
+### Prerequisites
+- Node.js 18+
+- PostgreSQL
+- Docker (optional)
+- Telegram Bot Token ([Get one](https://t.me/BotFather))
+- Plaid API Key ([Sign up](https://plaid.com))
 
-The flow: `User's Telegram App → Your Bot → Express API → PostgreSQL + Plaid → Bank Data`
-
-📘 **For complete deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**
-
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Node.js** 18.x or higher
-- **PostgreSQL** 14.x or higher
-- **npm** or **yarn** package manager
-- **Telegram Bot Token** (from [@BotFather](https://t.me/botfather))
-- **Plaid Account** (Sign up at [Plaid.com](https://plaid.com))
-
-## 🚀 Installation
-
-### 1. Clone the Repository
+### Installation
 
 ```bash
-git clone https://github.com/yourusername/telegram-plaid-bot.git
+# Clone repository
+git clone https://github.com/johnconstant99-dev/telegram-plaid-bot.git
 cd telegram-plaid-bot
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
-```
 
-### 3. Configure Environment Variables
-
-Copy the example environment file and configure it:
-
-```bash
+# Setup environment
 cp .env.example .env
-```
+# Edit .env with your credentials
 
-Edit `.env` with your credentials:
-
-```env
-# Telegram Bot Token (get from @BotFather)
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-
-# Plaid Credentials (from Plaid Dashboard)
-PLAID_CLIENT_ID=your_plaid_client_id
-PLAID_SECRET=your_plaid_secret
-PLAID_ENV=sandbox  # Use 'sandbox' for testing, 'production' for live
-
-# Database Connection
-DATABASE_URL=postgresql://user:password@localhost:5432/telegram_plaid
-
-# Server Configuration
-PORT=3000
-API_BASE_URL=http://localhost:3000
-
-# Security (IMPORTANT: Change these!)
-ENCRYPTION_KEY=your_32_character_encryption_key_here
-JWT_SECRET=your_jwt_secret_here
-
-# Logging
-LOG_LEVEL=info
-```
-
-**Important Security Notes:**
-- `ENCRYPTION_KEY` must be exactly 32 characters
-- Never commit `.env` file to version control
-- Use strong, random values for encryption keys
-- In production, use environment variables or secrets management
-
-### 4. Set Up Database
-
-#### Option A: Manual Setup
-
-Create the database:
-
-```bash
-createdb telegram_plaid
-```
-
-Initialize the schema:
-
-```bash
+# Initialize database
 npm run init-db
-```
 
-#### Option B: Docker Setup (Recommended)
-
-```bash
-docker-compose up -d db
-```
-
-The database will be automatically initialized with the schema.
-
-## 🏃 Running the Application
-
-### Development Mode
-
-```bash
+# Start development server
 npm run dev
 ```
 
-This uses nodemon for automatic reloading on file changes.
+See [QUICKSTART.md](./QUICKSTART.md) for detailed setup instructions.
 
-### Production Mode
+## 📋 Environment Configuration
+
+Create `.env` file with required variables:
 
 ```bash
-npm start
+# Telegram
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_WEBHOOK_SECRET=your_webhook_secret
+
+# Plaid
+PLAID_CLIENT_ID=your_client_id
+PLAID_SECRET=your_secret
+PLAID_ENV=sandbox
+
+# Database
+DATABASE_URL=postgresql://user:pass@localhost:5432/telegram_plaid_bot
+
+# Server
+NODE_ENV=development
+PORT=3000
 ```
 
-### Using Docker
+For **production**, use encrypted environment management:
+```bash
+npm run env:keygen                    # Generate keys
+dotenvx set VAR "value" -f .env.production  # Set encrypted vars
+```
 
-Build and run everything with Docker Compose:
+See [ENVIRONMENT_SETUP.md](./docs/ENVIRONMENT_SETUP.md) for details.
+
+## 🏗️ Project Structure
+
+```
+src/
+├── index.js                    # Application entry point
+├── bot/                        # Telegram bot implementation
+│   ├── index.js               # Bot initialization
+│   ├── commands/              # Command handlers
+│   └── middleware/            # Bot middleware
+├── api/                       # Express REST API
+│   ├── server.js              # Server configuration
+│   ├── routes/                # Route definitions
+│   └── controllers/           # Request handlers
+├── services/                  # Business logic
+│   ├── plaidService.js        # Plaid API wrapper
+│   ├── userService.js         # User management
+│   ├── encryptionService.js   # Token encryption
+│   └── stripeService.js       # Payment processing
+├── models/                    # Database models
+│   ├── User.js                # User model
+│   └── PlaidConnection.js     # Bank connection model
+├── database/                  # Database setup
+│   ├── connection.js          # PostgreSQL pool
+│   ├── init.sql               # Schema definition
+│   └── init.js                # Init script
+├── config/                    # Configuration
+│   └── index.js               # Config management
+└── utils/                     # Utilities
+    ├── logger.js              # Winston logger
+    └── errorHandler.js        # Error handling
+```
+
+## 📚 Available Commands
 
 ```bash
+# Development
+npm start              # Start production server
+npm run dev            # Start with auto-reload (nodemon)
+npm run init-db        # Initialize database schema
+
+# Environment Management
+npm run env:keygen     # Generate encryption keys
+npm run env:set        # Set encrypted variables
+npm run env:list       # List all environment variables
+npm run env:run        # Run commands with decrypted env
+```
+
+## 🔐 Security
+
+- **Encryption:** All sensitive tokens encrypted with AES-256-GCM
+- **Environment:** dotenvx for secure secret management
+- **Database:** Connection pooling with parameterized queries
+- **API:** Rate limiting, CORS, Helmet for security headers
+- **Keys:** Private keys stored securely, never committed
+
+## 🐳 Docker Deployment
+
+```bash
+# Start all services
 docker-compose up -d
-```
 
-Stop the application:
+# View logs
+docker-compose logs -f app
 
-```bash
+# Stop services
 docker-compose down
 ```
 
-View logs:
+## 📖 Documentation
 
-```bash
-docker-compose logs -f app
-```
+- [QUICKSTART.md](./QUICKSTART.md) - New developer setup guide
+- [docs/ENVIRONMENT_SETUP.md](./docs/ENVIRONMENT_SETUP.md) - Environment & encryption guide
+- [.github/copilot-instructions.md](./.github/copilot-instructions.md) - Development standards
 
-## 💬 Available Bot Commands
+## 🔄 CI/CD
 
-| Command | Description |
-|---------|-------------|
-| `/start` | Welcome message and initialization |
-| `/link` | Connect your bank account via Plaid |
-| `/balance` | View all connected account balances |
-| `/transactions` | View recent transactions (last 30 days) |
-| `/help` | Display help information |
+GitHub Actions workflow automatically:
+- ✅ Tests code on push to Main
+- 🔍 Validates encrypted environment files
+- 🏗️ Builds application
+- 🚀 Prepares for deployment
 
-### Keyboard Shortcuts
-
-The bot also provides interactive buttons:
-- 💳 **Link Account** - Same as `/link`
-- 💰 **Balance** - Same as `/balance`
-- 📊 **Transactions** - Same as `/transactions`
-- ❓ **Help** - Same as `/help`
-
-## 🔌 API Documentation
-
-### Endpoints
-
-#### Create Link Token
-```http
-POST /api/plaid/create-link-token
-Content-Type: application/json
-
-{
-  "telegram_id": 123456789
-}
-
-Response:
-{
-  "success": true,
-  "link_token": "link-sandbox-xxx",
-  "expiration": "2024-01-01T12:00:00Z"
-}
-```
-
-#### Exchange Public Token
-```http
-POST /api/plaid/exchange-token
-Content-Type: application/json
-
-{
-  "public_token": "public-sandbox-xxx",
-  "telegram_id": 123456789
-}
-
-Response:
-{
-  "success": true,
-  "institution_name": "Chase"
-}
-```
-
-#### Get Accounts
-```http
-GET /api/plaid/accounts/:telegram_id
-
-Response:
-{
-  "success": true,
-  "accounts": [
-    {
-      "name": "Plaid Checking",
-      "balance": 100.00,
-      "available": 95.00,
-      "type": "depository",
-      "subtype": "checking",
-      "institution": "Chase"
-    }
-  ]
-}
-```
-
-#### Get Transactions
-```http
-GET /api/plaid/transactions/:telegram_id?start_date=2024-01-01&end_date=2024-01-31
-
-Response:
-{
-  "success": true,
-  "transactions": [
-    {
-      "transaction_id": "xxx",
-      "name": "Uber",
-      "amount": 12.50,
-      "date": "2024-01-15",
-      "category": ["Transportation"],
-      "pending": false,
-      "institution": "Chase"
-    }
-  ]
-}
-```
-
-#### Webhook Handler
-```http
-POST /api/webhook/plaid
-Content-Type: application/json
-
-{
-  "webhook_type": "TRANSACTIONS",
-  "webhook_code": "DEFAULT_UPDATE",
-  "item_id": "xxx"
-}
-
-Response:
-{
-  "received": true
-}
-```
-
-### Health Check
-```http
-GET /health
-
-Response:
-{
-  "status": "ok",
-  "timestamp": "2024-01-01T12:00:00.000Z"
-}
-```
-
-## 🧪 Testing in Sandbox
-
-Plaid provides a sandbox environment for testing without real bank connections.
-
-### Sandbox Test Credentials
-
-When using Plaid Link in sandbox mode:
-
-1. **Institution**: Search for "First Platypus Bank"
-2. **Username**: `user_good`
-3. **Password**: `pass_good`
-4. **MFA**: `1234` (if prompted)
-
-### Testing the Flow
-
-1. Start the bot with `/start`
-2. Use `/link` to get a link token
-3. In a real implementation, you'd complete Plaid Link flow in a web interface
-4. The bot will guide you through the connection process
-5. Use `/balance` to view connected accounts
-6. Use `/transactions` to see transaction history
-
-## 🗂️ Project Structure
-
-```
-telegram-plaid-bot/
-├── src/
-│   ├── bot/                      # Telegram bot
-│   │   ├── index.js              # Bot initialization
-│   │   ├── commands/             # Command handlers
-│   │   │   ├── start.js
-│   │   │   ├── link.js
-│   │   │   ├── balance.js
-│   │   │   ├── transactions.js
-│   │   │   └── help.js
-│   │   └── middleware/           # Bot middleware
-│   │       └── auth.js
-│   ├── api/                      # Express API
-│   │   ├── server.js             # Server setup
-│   │   ├── routes/               # Route definitions
-│   │   │   ├── plaid.js
-│   │   │   └── webhook.js
-│   │   └── controllers/          # Request handlers
-│   │       ├── plaidController.js
-│   │       └── webhookController.js
-│   ├── services/                 # Business logic
-│   │   ├── plaidService.js       # Plaid API wrapper
-│   │   ├── userService.js        # User operations
-│   │   └── encryptionService.js  # Token encryption
-│   ├── models/                   # Data models
-│   │   ├── User.js
-│   │   └── PlaidConnection.js
-│   ├── database/                 # Database setup
-│   │   ├── connection.js         # DB connection pool
-│   │   ├── init.sql              # Schema definition
-│   │   └── init.js               # Initialization script
-│   ├── config/                   # Configuration
-│   │   └── index.js
-│   ├── utils/                    # Utilities
-│   │   ├── logger.js             # Winston logger
-│   │   └── errorHandler.js       # Error handling
-│   └── index.js                  # Application entry point
-├── .env.example                  # Environment template
-├── .gitignore
-├── package.json
-├── Dockerfile
-├── docker-compose.yml
-├── DEPLOYMENT.md                 # Complete deployment guide
-└── README.md
-```
-
-## 🚀 Deployment
-
-This application can be deployed to various platforms. The Telegram bot serves as your GUI - no frontend deployment needed!
-
-### Quick Deploy Options
-
-1. **Heroku** (Easiest for beginners)
-   ```bash
-   heroku create my-telegram-bot
-   heroku addons:create heroku-postgresql:mini
-   git push heroku main
-   ```
-
-2. **DigitalOcean/VPS** (Best for production)
-   - Install Node.js, PostgreSQL, PM2
-   - Clone repo, configure .env
-   - Start with `pm2 start src/index.js`
-
-3. **Docker** (Recommended)
-   ```bash
-   docker-compose up -d
-   ```
-
-### Essential Steps for Any Platform
-
-1. **Get Telegram Bot Token**: Talk to [@BotFather](https://t.me/botfather) on Telegram
-2. **Get Plaid Credentials**: Sign up at [Plaid.com](https://plaid.com)
-3. **Set Environment Variables**: Copy `.env.example` and fill in your credentials
-4. **Initialize Database**: Run `npm run init-db`
-5. **Start Application**: The bot will be your GUI automatically!
-
-📘 **For detailed deployment instructions (cloud, VPS, Docker, monitoring), see [DEPLOYMENT.md](DEPLOYMENT.md)**
-
-## 🔐 Security Best Practices
-
-### Implemented Security Measures
-
-1. **Token Encryption**
-   - All Plaid access tokens encrypted with AES-256-GCM
-   - Unique initialization vectors for each encryption
-   - Authentication tags for integrity verification
-
-2. **Environment Security**
-   - All secrets in environment variables
-   - `.env` excluded from version control
-   - Validation of required environment variables on startup
-
-3. **API Security**
-   - Helmet.js for HTTP security headers
-   - CORS configured for controlled access
-   - Rate limiting (60 requests/minute per IP)
-   - Input validation on all endpoints
-
-4. **Database Security**
-   - Parameterized queries prevent SQL injection
-   - Connection pooling with timeouts
-   - CASCADE deletes for data integrity
-
-5. **Error Handling**
-   - No sensitive data in error messages
-   - Production mode hides stack traces
-   - Comprehensive logging without secrets
-
-6. **Production Recommendations**
-   - Use HTTPS for all communications
-   - Set up SSL/TLS for database connections
-   - Implement proper secrets management (AWS Secrets Manager, etc.)
-   - Enable webhook signature verification
-   - Regular security audits
-   - Keep dependencies updated
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Bot Not Responding
-- Verify `TELEGRAM_BOT_TOKEN` is correct
-- Check bot is running: `docker-compose ps` or check process
-- Review logs: `docker-compose logs app` or `tail -f combined.log`
-
-#### Database Connection Errors
-- Ensure PostgreSQL is running
-- Verify `DATABASE_URL` is correct
-- Check database exists: `psql -l`
-- Run database initialization: `npm run init-db`
-
-#### Plaid API Errors
-- Verify `PLAID_CLIENT_ID` and `PLAID_SECRET`
-- Check `PLAID_ENV` matches your credentials (sandbox/production)
-- Review Plaid error codes in logs
-- Ensure test credentials are correct for sandbox
-
-#### Encryption Errors
-- `ENCRYPTION_KEY` must be exactly 32 characters
-- Don't change key after encrypting tokens (they'll be unreadable)
-- If needed, generate new key: `node -e "console.log(crypto.randomBytes(16).toString('hex'))"`
-
-#### Rate Limiting
-- Default: 60 requests/minute
-- Adjust in `src/api/server.js` if needed
-- Wait or increase limit for legitimate high-volume use
-
-### Logs
-
-Check application logs:
-```bash
-# Combined logs
-tail -f combined.log
-
-# Error logs only
-tail -f error.log
-
-# Docker logs
-docker-compose logs -f app
-```
+See `.github/workflows/deploy.yml` for configuration.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+1. Follow the [Copilot Instructions](./.github/copilot-instructions.md)
+2. Use CommonJS modules (`require`/`module.exports`)
+3. Implement async/await with try-catch
+4. Add Winston logging, not console.log
+5. Test locally before pushing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📝 License
 
-### Development Guidelines
+MIT License - see LICENSE file for details
 
-- Follow existing code style
-- Add comments for complex logic
-- Update README for new features
-- Test thoroughly before submitting
-- Keep commits focused and descriptive
+## 🆘 Support
 
-## 📄 License
+- [GitHub Issues](https://github.com/johnconstant99-dev/telegram-plaid-bot/issues)
+- [Telegram Documentation](https://core.telegram.org/bots)
+- [Plaid API Docs](https://plaid.com/docs)
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 👤 Author
 
-## 🙏 Acknowledgments
-
-- [Plaid](https://plaid.com) for the banking API
-- [Telegraf](https://telegraf.js.org) for the Telegram bot framework
-- [Express](https://expressjs.com) for the web framework
-- All contributors and supporters
-
-## 📞 Support
-
-For issues and questions:
-- Open an issue on GitHub
-- Check the [Plaid API Documentation](https://plaid.com/docs)
-- Review [Telegraf Documentation](https://telegraf.js.org)
-
-## ⚠️ Disclaimer
-
-This bot handles sensitive financial information. Always:
-- Use in compliance with local regulations
-- Implement additional security measures for production
-- Never store or log sensitive user data
-- Follow Plaid's terms of service
-- Obtain proper user consent
-- Keep all dependencies updated
+**johnconstant99-dev**
+- GitHub: [@johnconstant99-dev](https://github.com/johnconstant99-dev)
 
 ---
 
-**Happy Banking! 🏦**
+**Made with ❤️ for secure financial data management**
