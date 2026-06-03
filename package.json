@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "init-db": "node src/database/init.js"
+    "init-db": "node src/database/init.js",
+    "env:keygen": "dotenvx keygen",
+    "env:set": "dotenvx set",
+    "env:list": "dotenvx ls",
+    "env:run": "dotenvx run --"
   },
   "keywords": [
     "telegram",
@@ -31,7 +35,8 @@
     "stripe": "^14.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "dotenvx": "^0.33.0"
   },
   "engines": {
     "node": ">=18.0.0"
